@@ -15,6 +15,7 @@ using Carter;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -181,6 +182,14 @@ namespace LiGet.Extensions
                 options.KnownProxies.Clear();
             });
 
+            services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = long.MaxValue;
+                o.MultipartBoundaryLengthLimit = int.MaxValue;
+                o.MultipartHeadersCountLimit = int.MaxValue;
+                o.MultipartHeadersLengthLimit = int.MaxValue;
+            });
             return services;
         }
 

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Reflection;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace LiGet
 {
@@ -87,6 +88,12 @@ namespace LiGet
 
             app.UseCarter();
 
+            app.Use(async (context, next) =>
+            {
+                context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = null;
+                await next.Invoke();
+            });
+            
             if(env.IsDevelopment())
             {
                 app.UseSpa(spa =>
